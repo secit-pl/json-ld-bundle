@@ -11,7 +11,6 @@
             "email": "t.gemza@secit.pl"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
         "symfony/framework-bundle": "~2.8|~3.0",
