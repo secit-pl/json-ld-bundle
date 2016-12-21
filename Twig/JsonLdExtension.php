@@ -20,7 +20,7 @@ class JsonLdExtension extends \Twig_Extension implements ContainerAwareInterface
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('jsonLd', [$this, 'jsonLdFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('json_ld', [$this, 'jsonLdFilter'], ['is_safe' => ['html']]),
         ];
     }
 
