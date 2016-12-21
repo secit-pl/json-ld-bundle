@@ -1,0 +1,3 @@
+services:
+    secit.json_ld:
+        class: SecIT\JsonLdBundle\Service\JsonLd
