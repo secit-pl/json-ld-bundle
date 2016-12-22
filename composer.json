@@ -1,7 +1,7 @@
 {
     "name": "secit-pl/json-ld-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony wrapper bundle for the torann/json-ld JSON-LD generator.",
+    "description": "Schema.org JSON-LD generator Symfony Bundle.",
     "keywords": ["json-ld", "generator", "schema", "schema.org", "structured-data", "symfony", "bundle"],
     "homepage": "http://secit.pl",
     "license": "MIT",

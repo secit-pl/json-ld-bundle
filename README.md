@@ -1,6 +1,6 @@
-# JSON-LD Symfony Bundle
+# Schema.org JSON-LD Symfony Bundle
 
-JSON-LD generator for the Symfony 2.8 and 3.0+.
+Schema.org JSON-LD generator for the Symfony 2.8 and 3.0+.
 
 ## Installation
 
