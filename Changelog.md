@@ -1,8 +1,18 @@
+## 1.3.2 (2016-12-22)
+
+Bugfix:
+
+* Fixed class transformer registration when registering transformer for the class which extends previously registered class.
+
 ## 1.3.1 (2016-12-22)
 
 Bugfix:
 
 * Fixed class inheritance support.
+
+Other:
+
+* Documentation update
 
 ## 1.3.0 (2016-12-22)
 

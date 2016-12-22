@@ -36,7 +36,7 @@ class JsonLd implements ContainerAwareInterface
      */
     public function addTransformer($class, TransformerInterface $transformer)
     {
-        if ($this->hasTransformer($class)) {
+        if ($this->hasTransformer($class, false)) {
             throw new \Exception('Transformer for the class '.$class.' already loaded.');
         }
 
@@ -97,12 +97,13 @@ class JsonLd implements ContainerAwareInterface
      * Check if transformer is loaded.
      *
      * @param object|string $element
+     * @param bool          $checkInheritance
      *
      * @return bool
      */
-    public function hasTransformer($element)
+    public function hasTransformer($element, $checkInheritance = true)
     {
-        return $this->getElementClass($element) !== false;
+        return $this->getElementClass($element, $checkInheritance) !== false;
     }
 
     /**
@@ -121,12 +122,13 @@ class JsonLd implements ContainerAwareInterface
      * Try to determine the valid element class name to match the loaded transformable classes.
      *
      * @param object|string $element
+     * @param bool          $checkInheritance
      *
      * @return string|bool Returns false on failure.
      *
      * @throws \Exception
      */
-    protected function getElementClass($element)
+    protected function getElementClass($element, $checkInheritance = true)
     {
         if (is_object($element)) {
             $class = get_class($element);
@@ -140,10 +142,12 @@ class JsonLd implements ContainerAwareInterface
             return $class;
         }
 
-        $reflectionClass = new \ReflectionClass($element);
-        while ($class = $reflectionClass->getParentClass()) {
-            if (isset($this->transformers[$class->getName()])) {
-                return $class->getName();
+        if ($checkInheritance) {
+            $reflectionClass = new \ReflectionClass($element);
+            while ($class = $reflectionClass->getParentClass()) {
+                if (isset($this->transformers[$class->getName()])) {
+                    return $class->getName();
+                }
             }
         }
 
