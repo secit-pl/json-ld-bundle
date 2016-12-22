@@ -76,6 +76,80 @@ The output should be something like this:
 <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Thing","name":"Some name"}</script>
 ```
 
+### Advenced usage
+
+In many situations it's required to have a nested transformers to not implement whole logic in the single class.
+To use nested transformers your Transformer should implement JsonLdAwareInterface. If you don't want to implement
+the interface methods by your own you can use the JsonLdAwareTrait.
+
+Here is the simple example of how to use it:
+
+AuthorTransformer.php
+```php
+namespace Test\TestBundle\JsonLd;
+
+use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
+use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareTrait;
+use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+
+class AuthorTransformer implements TransformerInterface
+{
+    public function getContextType()
+    {
+        return 'author';
+    }
+
+    public function transform($author)
+    {
+        return [
+            'name' => $author->name,
+        ];
+    }
+}
+```
+
+ArticleTransformer.php
+```php
+namespace Test\TestBundle\JsonLd;
+
+use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
+use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareTrait;
+use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+
+class ArticleTransformer implements TransformerInterface, JsonLdAwareInterface
+{
+    use JsonLdAwareTrait;
+
+    public function getContextType()
+    {
+        return 'article';
+    }
+
+    public function transform($article)
+    {
+        return [
+            'name' => $article->name,
+            'author' => $this->getJsonLd()->transform($article->author),
+        ];
+    }
+}
+```
+
+Example input object:
+```php
+$author = new Author();
+$author->name = 'Jon Smith';
+
+$article = new Article();
+$article->name = 'Example article';
+$article->author = $author;
+```
+
+Output:
+```html
+<script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Example article","author":{"@type":"Person","name":"Jon Smith"}}</script>
+```
+
 ### Twig Support
 
 This bundle also provides the Twig extension which allow to render JSON-LD directly from the Twig templates.

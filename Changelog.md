@@ -1,3 +1,9 @@
+## 1.3.0 (2016-12-22)
+
+Feature:
+
+* Added nested transformers support.
+
 ## 1.2.0 (2016-12-21)
 
 BC break change:

@@ -3,15 +3,20 @@
 namespace SecIT\JsonLdBundle\Service;
 
 use JsonLd\Context;
+use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class JsonLd.
  *
  * @author Tomasz Gemza
  */
-class JsonLd
+class JsonLd implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * Loaded object transformers.
      *
@@ -33,6 +38,10 @@ class JsonLd
     {
         if ($this->hasTransformer($class)) {
             throw new \Exception('Transformer for the class '.$class.' already loaded.');
+        }
+
+        if ($transformer instanceof JsonLdAwareInterface) {
+            $transformer->setJsonLd($this);
         }
 
         $this->transformers[$class] = $transformer;
@@ -94,6 +103,18 @@ class JsonLd
     public function hasTransformer($element)
     {
         return isset($this->transformers[$this->getElementClass($element)]);
+    }
+
+    /**
+     * Transform object to the JSON-LD data array.
+     *
+     * @param object $object
+     *
+     * @return array
+     */
+    public function transform($object)
+    {
+        return $this->getTransformer($object)->transform($object);
     }
 
     /**
