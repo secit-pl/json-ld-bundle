@@ -152,7 +152,7 @@ Output:
 
 ### Twig Support
 
-This bundle also provides the Twig extension which allow to render JSON-LD directly from the Twig templates.
+This bundle also provides the Twig extension which allows to render JSON-LD directly from the Twig templates.
 
 TestController:
 
@@ -161,7 +161,6 @@ namespace Test\TestBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Test\TestBundle\TestClass\Class1;
 
 class TestController extends Controller
 {
