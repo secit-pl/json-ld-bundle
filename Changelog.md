@@ -1,3 +1,9 @@
+## 1.3.1 (2016-12-22)
+
+Bugfix:
+
+* Fixed class inheritance support.
+
 ## 1.3.0 (2016-12-22)
 
 Feature:

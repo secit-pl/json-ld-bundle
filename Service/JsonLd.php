@@ -102,7 +102,7 @@ class JsonLd implements ContainerAwareInterface
      */
     public function hasTransformer($element)
     {
-        return isset($this->transformers[$this->getElementClass($element)]);
+        return $this->getElementClass($element) !== false;
     }
 
     /**
@@ -118,11 +118,11 @@ class JsonLd implements ContainerAwareInterface
     }
 
     /**
-     * Get element class name.
+     * Try to determine the valid element class name to match the loaded transformable classes.
      *
      * @param object|string $element
      *
-     * @return string
+     * @return string|bool Returns false on failure.
      *
      * @throws \Exception
      */
@@ -136,6 +136,17 @@ class JsonLd implements ContainerAwareInterface
             throw new \Exception('Only object or string allowed.');
         }
 
-        return $class;
+        if (isset($this->transformers[$class])) {
+            return $class;
+        }
+
+        $reflectionClass = new \ReflectionClass($element);
+        while ($class = $reflectionClass->getParentClass()) {
+            if (isset($this->transformers[$class->getName()])) {
+                return $class->getName();
+            }
+        }
+
+        return false;
     }
 }
