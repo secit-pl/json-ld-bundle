@@ -10,6 +10,23 @@ From the command line run
 $ composer require secit-pl/json-ld-bundle
 ```
 
+Update your AppKernel by adding the bundle declaration
+
+```php
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = [
+            ...
+            new SecIT\JsonLdBundle\JsonLdBundle(),
+        ];
+
+        ...
+    }
+}
+```
+
 ## Usage
 
 ### Basic Usage
