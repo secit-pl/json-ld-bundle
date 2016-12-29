@@ -124,7 +124,7 @@ class JsonLd implements ContainerAwareInterface
      * @param object|string $element
      * @param bool          $checkInheritance
      *
-     * @return string|bool Returns false on failure.
+     * @return string|bool Returns false on failure
      *
      * @throws \Exception
      */
