@@ -1,3 +1,9 @@
+## 2.0.0 (2016-01-06)
+
+BC break change:
+
+* Dropped support for the https://github.com/Torann/json-ld for the own Schema.org mapping implementation https://github.com/secit-pl/schema-org.
+
 ## 1.3.2 (2016-12-22)
 
 Bugfix:
