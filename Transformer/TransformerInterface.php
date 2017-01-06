@@ -12,7 +12,7 @@ interface TransformerInterface
     /**
      * Transform object to the Schema.org class mapping.
      *
-     * @see https://github.com/Torann/json-ld#context-types
+     * @see https://github.com/secit-pl/schema-org
      *
      * @param mixed $object
      *
