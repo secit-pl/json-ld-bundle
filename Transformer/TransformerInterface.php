@@ -10,20 +10,13 @@ namespace SecIT\JsonLdBundle\Transformer;
 interface TransformerInterface
 {
     /**
-     * Get context type.
+     * Transform object to the Schema.org class mapping.
      *
      * @see https://github.com/Torann/json-ld#context-types
      *
-     * @return string
-     */
-    public function getContextType();
-
-    /**
-     * Transform object to the context type data array.
-     *
      * @param mixed $object
      *
-     * @return array
+     * @return \SecIT\SchemaOrg\Mapping\Type\Thing
      */
     public function transform($object);
 }

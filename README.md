@@ -31,30 +31,29 @@ class AppKernel extends Kernel
 
 ### Basic Usage
 
-First of all you need to create a Transformer which will transform the object to the data array.
+First of all you need to create a Transformer which will transform your object to schema.org data mapping.
 
 ```php
 namespace Test\TestBundle\JsonLd;
 
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+use SecIT\SchemaOrg\Mapping\DataType;
+use SecIT\SchemaOrg\Mapping\Property;
+use SecIT\SchemaOrg\Mapping\Type;
 
 class TestTransformer implements TransformerInterface
 {
-    public function getContextType()
-    {
-        return 'thing';
-    }
-
     public function transform($object)
     {
-        return [
-            'name' => $object->getName(),
-        ];
+        return (new Type\Thing())
+            ->setName(new Property\Name(
+                new DataType\TextType($object->getName())
+            ));
     }
 }
 ```
 
-As the basis for this of this bundle is the https://github.com/Torann/json-ld so the transformer should return the context type and data accepted by the JSON-LD Generator.
+As the basis for this of this bundle is the https://github.com/secit-pl/schema-org so the transformer should return the object accepted by the JSON-LD Generator.
 
 Next you need to register the transformer as service using the secit.jsonld_transformer tag in your services.yml.
 
@@ -101,26 +100,25 @@ the interface methods by your own you can use the JsonLdAwareTrait.
 
 Here is the simple example of how to use it:
 
-AuthorTransformer.php
+PersonTransformer.php
 ```php
 namespace Test\TestBundle\JsonLd;
 
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareTrait;
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+use SecIT\SchemaOrg\Mapping\DataType;
+use SecIT\SchemaOrg\Mapping\Property;
+use SecIT\SchemaOrg\Mapping\Type;
 
-class AuthorTransformer implements TransformerInterface
+class PersonTransformer implements TransformerInterface
 {
-    public function getContextType()
+    public function transform($person)
     {
-        return 'author';
-    }
-
-    public function transform($author)
-    {
-        return [
-            'name' => $author->name,
-        ];
+        return (new Type\Person())
+            ->setName(new Property\Name(
+                new DataType\TextType($person->name)
+            ));
     }
 }
 ```
@@ -132,29 +130,32 @@ namespace Test\TestBundle\JsonLd;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareTrait;
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+use SecIT\SchemaOrg\Mapping\DataType;
+use SecIT\SchemaOrg\Mapping\Property;
+use SecIT\SchemaOrg\Mapping\Type;
 
 class ArticleTransformer implements TransformerInterface, JsonLdAwareInterface
 {
     use JsonLdAwareTrait;
 
-    public function getContextType()
-    {
-        return 'article';
-    }
-
     public function transform($article)
     {
-        return [
-            'name' => $article->name,
-            'author' => $this->getJsonLd()->transform($article->author),
-        ];
+        return (new Type\Article())
+            ->setName(
+                new Property\Name(
+                    new DataType\TextType($article->name)
+                )
+            )
+            ->setAuthor(new Property\Author(
+                $this->getJsonLd()->transform($article->author)
+            ));
     }
 }
 ```
 
 Example input object:
 ```php
-$author = new Author();
+$author = new Person();
 $author->name = 'Jon Smith';
 
 $article = new Article();
@@ -162,7 +163,7 @@ $article->name = 'Example article';
 $article->author = $author;
 ```
 
-Output:
+The output:
 ```html
 <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article","name":"Example article","author":{"@type":"Person","name":"Jon Smith"}}</script>
 ```
@@ -195,7 +196,7 @@ example.html.twig:
 {{ object|json_ld }}
 ```
 
-Output:
+The output:
 ```html
 <script type="application/ld+json">{"@context":"http:\/\/schema.org", ... }</script>
 ```

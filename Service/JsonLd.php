@@ -2,9 +2,9 @@
 
 namespace SecIT\JsonLdBundle\Service;
 
-use JsonLd\Context;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
+use SecIT\SchemaOrg;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -65,8 +65,9 @@ class JsonLd implements ContainerAwareInterface
         }
 
         $transformer = $this->getTransformer($object);
+        $schemaOrg = new SchemaOrg();
 
-        return (string) Context::create($transformer->getContextType(), $transformer->transform($object));
+        return $schemaOrg->toJsonLd($transformer->transform($object));
     }
 
     /**
@@ -107,11 +108,11 @@ class JsonLd implements ContainerAwareInterface
     }
 
     /**
-     * Transform object to the JSON-LD data array.
+     * Transform object to the JSON-LD mapping.
      *
      * @param object $object
      *
-     * @return array
+     * @return SchemaOrg\Mapping\Type\Thing
      */
     public function transform($object)
     {

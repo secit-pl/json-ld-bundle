@@ -15,7 +15,7 @@
         "php": ">=5.4.0",
         "symfony/framework-bundle": "~2.8|~3.0",
         "symfony/dependency-injection": "~2.8|~3.0",
-        "torann/json-ld": "^0.0.8"
+        "secit-pl/schema-org": "^3.1"
     },
     "autoload": {
         "psr-4": { "SecIT\\JsonLdBundle\\": "" }
