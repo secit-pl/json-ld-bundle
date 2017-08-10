@@ -1,3 +1,9 @@
+## 2.1.0 (2016-08-10)
+
+Other:
+
+* Updated composer.json to use secit-pl/schema-org in version 3.2
+
 ## 2.0.0 (2016-01-06)
 
 BC break change:
