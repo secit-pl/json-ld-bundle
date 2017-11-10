@@ -2,6 +2,15 @@
 
 Schema.org JSON-LD generator for the Symfony 2.8 and 3.0+.
 
+#### PHP 7 support
+
+As of release 3.3.2 of the https://github.com/secit-pl/schema-org all types and properties should be suffixed.
+This bundle allows using both class versions (the new suffixed classes and the deprecated non suffixed), but be aware
+that only suffixed classes will work properly on the PHP 7.
+
+Another reason for moving to the new class naming schema is the fact that all non suffixed classes will be removed
+in the release 3.4 of the secit-pl/schema-org.
+
 ## Installation
 
 From the command line run
@@ -37,17 +46,17 @@ First of all you need to create a Transformer which will transform your object t
 namespace Test\TestBundle\JsonLd;
 
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
-use SecIT\SchemaOrg\Mapping\DataType;
-use SecIT\SchemaOrg\Mapping\Property;
-use SecIT\SchemaOrg\Mapping\Type;
+use SecIT\SchemaOrg\Mapping\DataType\TextType;
+use SecIT\SchemaOrg\Mapping\Property\NameProperty;
+use SecIT\SchemaOrg\Mapping\Type\ThingType;
 
 class TestTransformer implements TransformerInterface
 {
     public function transform($object)
     {
-        return (new Type\Thing())
-            ->setName(new Property\Name(
-                new DataType\TextType($object->getName())
+        return (new ThingType())
+            ->setName(new NameProperty(
+                new TextType($object->getName())
             ));
     }
 }
@@ -92,7 +101,7 @@ The output should be something like this:
 <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Thing","name":"Some name"}</script>
 ```
 
-### Advenced usage
+### Advanced usage
 
 In many situations it's required to have a nested transformers to not implement whole logic in the single class.
 To use nested transformers your Transformer should implement JsonLdAwareInterface. If you don't want to implement
@@ -107,17 +116,17 @@ namespace Test\TestBundle\JsonLd;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareTrait;
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
-use SecIT\SchemaOrg\Mapping\DataType;
-use SecIT\SchemaOrg\Mapping\Property;
-use SecIT\SchemaOrg\Mapping\Type;
+use SecIT\SchemaOrg\Mapping\DataType\TextType;
+use SecIT\SchemaOrg\Mapping\Property\NameProperty;
+use SecIT\SchemaOrg\Mapping\Type\PersonType;
 
 class PersonTransformer implements TransformerInterface
 {
     public function transform($person)
     {
-        return (new Type\Person())
-            ->setName(new Property\Name(
-                new DataType\TextType($person->name)
+        return (new PersonType())
+            ->setName(new NameProperty(
+                new TextType($person->name)
             ));
     }
 }
@@ -130,9 +139,10 @@ namespace Test\TestBundle\JsonLd;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareInterface;
 use SecIT\JsonLdBundle\DependencyInjection\JsonLdAwareTrait;
 use SecIT\JsonLdBundle\Transformer\TransformerInterface;
-use SecIT\SchemaOrg\Mapping\DataType;
-use SecIT\SchemaOrg\Mapping\Property;
-use SecIT\SchemaOrg\Mapping\Type;
+use SecIT\SchemaOrg\Mapping\DataType\TextType;
+use SecIT\SchemaOrg\Mapping\Property\AuthorProperty;
+use SecIT\SchemaOrg\Mapping\Property\NameProperty;
+use SecIT\SchemaOrg\Mapping\Type\ArticleType;
 
 class ArticleTransformer implements TransformerInterface, JsonLdAwareInterface
 {
@@ -140,13 +150,11 @@ class ArticleTransformer implements TransformerInterface, JsonLdAwareInterface
 
     public function transform($article)
     {
-        return (new Type\Article())
-            ->setName(
-                new Property\Name(
-                    new DataType\TextType($article->name)
-                )
-            )
-            ->setAuthor(new Property\Author(
+        return (new ArticleType())
+            ->setName(new NameProperty(
+                new TextType($article->name)
+            ))
+            ->setAuthor(new AuthorProperty(
                 $this->getJsonLd()->transform($article->author)
             ));
     }
