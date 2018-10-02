@@ -58,7 +58,7 @@ class JsonLd implements ContainerAwareInterface
      *
      * @throws \Exception
      */
-    public function generate($object)
+    public function generate($object, $addScriptTag = true)
     {
         if (!is_object($object)) {
             throw new \Exception('Expected object, got '.gettype($object).'.');
@@ -67,7 +67,7 @@ class JsonLd implements ContainerAwareInterface
         $transformer = $this->getTransformer($object);
         $schemaOrg = new SchemaOrg();
 
-        return $schemaOrg->toJsonLd($transformer->transform($object));
+        return $schemaOrg->toJsonLd($transformer->transform($object), $addScriptTag);
     }
 
     /**
