@@ -1,5 +1,6 @@
 services:
     secit.json_ld:
+        public: true
         class: SecIT\JsonLdBundle\Service\JsonLd
         calls:
             - ['setContainer', ['@service_container']]

@@ -1,6 +1,6 @@
 # Schema.org JSON-LD Symfony Bundle
 
-Schema.org JSON-LD generator for the Symfony 2.8 and 3.0+.
+Schema.org JSON-LD generator for the Symfony 2.8, 3.0+ and 4.0+.
 
 #### PHP 7 support
 
