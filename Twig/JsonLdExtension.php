@@ -4,13 +4,15 @@ namespace SecIT\JsonLdBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Class JsonLdExtension.
  *
  * @author Tomasz Gemza
  */
-class JsonLdExtension extends \Twig_Extension implements ContainerAwareInterface
+class JsonLdExtension extends AbstractExtension implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -20,7 +22,7 @@ class JsonLdExtension extends \Twig_Extension implements ContainerAwareInterface
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('json_ld', [$this, 'jsonLdFilter'], ['is_safe' => ['html']]),
+            new TwigFilter('json_ld', [$this, 'jsonLdFilter'], ['is_safe' => ['html']]),
         ];
     }
 
